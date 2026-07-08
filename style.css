@@ -1761,6 +1761,46 @@ left:16px;
 
 }
 
+.math-item{
+
+animation:none !important;
+
+}
+
+.reveal{
+
+opacity:1 !important;
+
+transform:none !important;
+
+transition:none !important;
+
+}
+
+.benefit-card,
+.about-card,
+.contact-card,
+.stat-card,
+.card-front,
+.card-back{
+
+backdrop-filter:none !important;
+
+}
+
+.card-front,
+.card-back{
+
+box-shadow:0 4px 10px rgba(0,0,0,.15) !important;
+
+}
+
+.hero{
+
+min-height:85vh;
+
+}
+
 }
 
 @media(max-width:768px){
