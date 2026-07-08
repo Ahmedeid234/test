@@ -168,7 +168,7 @@ const background=document.getElementById("math-background");
 
 if(background){
 
-const total = isDesktop ? 90 : 25;
+const total = isDesktop ? 90 : 12;
 
 for(let i=0;i<total;i++){
 
@@ -227,7 +227,7 @@ loading.style.visibility="hidden";
 
 }
 
-},1300);
+},600);
 
 });
 
@@ -362,7 +362,7 @@ item.classList.add("active");
 
 }
 
-if(isDesktop){
+if(window.innerWidth > 768){
 
 window.addEventListener("scroll",reveal);
 
@@ -621,7 +621,7 @@ card.style.transform=
         تحريك الخلفية
 =========================================*/
 
-if(isDesktop){
+if(window.innerWidth > 768){
 
 setInterval(()=>{
 
@@ -641,7 +641,13 @@ item.style.opacity=(0.05+Math.random()*0.12);
 
 const hero=document.querySelector(".hero");
 
-if(isDesktop && hero){
+if(hero){
+
+hero.style.opacity="1";
+
+hero.style.transform="translateY(0px)";
+
+if(window.innerWidth > 768){
 
 window.addEventListener("scroll",()=>{
 
@@ -652,6 +658,8 @@ hero.style.opacity=1-value/700;
 hero.style.transform=`translateY(${value*0.18}px)`;
 
 });
+
+}
 }
 
 
