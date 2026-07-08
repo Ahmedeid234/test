@@ -162,13 +162,15 @@ const formulas=[
         إنشاء الخلفية
 =========================================*/
 
+const isDesktop = window.innerWidth > 768;
+
 const background=document.getElementById("math-background");
 
 if(background){
 
-const items = window.innerWidth <= 768 ? 25 : 90;
+const total = isDesktop ? 90 : 25;
 
-for(let i=0;i<items;i++){
+for(let i=0;i<total;i++){
 
 const item=document.createElement("div");
 
@@ -360,7 +362,7 @@ item.classList.add("active");
 
 }
 
-if(window.innerWidth > 768){
+if(isDesktop){
 
 window.addEventListener("scroll",reveal);
 
@@ -438,8 +440,7 @@ behavior:"smooth"
         Ripple Effect
 =========================================*/
 
-if(window.innerWidth > 768){
-
+if(isDesktop){
 document.querySelectorAll(
 
 ".hero-btn,.contact-card,#backToTop,.floating-whatsapp"
@@ -486,7 +487,11 @@ const header=document.querySelector(".navbar");
 
 if(header){
 
+let lastScroll=0;
+
 window.addEventListener("scroll",()=>{
+
+const current=window.pageYOffset;
 
 if(window.scrollY>60){
 
@@ -504,16 +509,6 @@ header.style.boxShadow="none";
 
 }
 
-});
-
-if(window.innerWidth <= 768){
-
-let lastScroll=0;
-
-window.addEventListener("scroll",()=>{
-
-const current=window.pageYOffset;
-
 if(current>lastScroll && current>80){
 
 header.style.transform="translateY(-100%)";
@@ -527,8 +522,6 @@ header.style.transform="translateY(0)";
 lastScroll=current;
 
 });
-
-}
 
 }
 
@@ -563,7 +556,7 @@ card.style.transform="translateY(0px)";
         Mouse Glow
 =========================================*/
 
-if(window.innerWidth > 768){
+if(isDesktop){
 
 const glow=document.createElement("div");
 
@@ -587,8 +580,6 @@ glow.style.top=e.clientY+"px";
 document.querySelectorAll(".flip-card").forEach(card=>{
 
 card.addEventListener("mousemove",(e)=>{
-
-if(window.innerWidth<=768) return;
 
 const rect=card.getBoundingClientRect();
 
@@ -630,6 +621,8 @@ card.style.transform=
         تحريك الخلفية
 =========================================*/
 
+if(isDesktop){
+
 setInterval(()=>{
 
 document.querySelectorAll(".math-item").forEach(item=>{
@@ -639,6 +632,7 @@ item.style.opacity=(0.05+Math.random()*0.12);
 });
 
 },2500);
+}
 
 
 /*=========================================
@@ -647,19 +641,18 @@ item.style.opacity=(0.05+Math.random()*0.12);
 
 const hero=document.querySelector(".hero");
 
-window.addEventListener("scroll",()=>{
+if(isDesktop && hero){
 
-if(!hero) return;
+window.addEventListener("scroll",()=>{
 
 const value=window.scrollY;
 
 hero.style.opacity=1-value/700;
 
-hero.style.transform=
-
-`translateY(${value*0.18}px)`;
+hero.style.transform=`translateY(${value*0.18}px)`;
 
 });
+}
 
 
 /*=========================================
