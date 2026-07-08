@@ -1082,7 +1082,12 @@ transform:scale(1.08);
 	border:1px solid rgba(255,255,255,.06);
 	border-radius:16px;
 	padding:16px;
+	margin-bottom:10px;
 	transition:.35s;
+}
+
+.schedule-item:last-child{
+	margin-bottom:0;
 }
 
 .schedule-item:hover{
@@ -1599,14 +1604,15 @@ font-size:40px;
 	opacity:1 !important;
 	perspective:none;
 	height:auto;
-	min-height:330px;
+	min-height:520px;
 }
 
 .card-front,
 .card-back{
 	backdrop-filter:none;
-	padding:24px;
+	padding:20px;
 	position:relative;
+	overflow-y:auto;
 }
 
 .flip-card-inner{
