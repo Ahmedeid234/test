@@ -1,53 +1,31 @@
 /*==================================================
         الأستاذ محمد عيد
         script.js
-        Version 8
-        PART 1
+        Version 9
 ==================================================*/
 
-
 /*=========================================
-            بيانات المواعيد
+        بيانات المواعيد
 =========================================*/
-
-const schedules = [
+const schedules=[
 
 {
-
+stage:"prep",
 number:"1",
-
 title:"أولى إعدادي",
 
 groups:[
 
 {
-
 title:"المجموعة الأولى",
-
-days:"الأحد - الأربعاء",
-
-time:"٣:٣٠ مساءً"
-
-},
-
-{
-
-title:"المجموعة الثانية",
-
 days:"السبت - الثلاثاء",
-
-time:"٥:٠٠ مساءً"
-
+time:"4:00 مساءً"
 },
 
 {
-
-title:"المجموعة الثالثة",
-
-days:"الأحد - الأربعاء",
-
-time:"٧:٠٠ مساءً"
-
+title:"المجموعة الثانية",
+days:"السبت - الثلاثاء",
+time:"5:00 مساءً"
 }
 
 ]
@@ -55,6 +33,8 @@ time:"٧:٠٠ مساءً"
 },
 
 {
+
+stage:"prep",
 
 number:"2",
 
@@ -66,9 +46,9 @@ groups:[
 
 title:"المجموعة الأولى",
 
-days:"السبت - الاثنين",
+days:"السبت - الثلاثاء",
 
-time:"٤:٣٠ مساءً"
+time:"2:00 مساءً"
 
 },
 
@@ -76,9 +56,9 @@ time:"٤:٣٠ مساءً"
 
 title:"المجموعة الثانية",
 
-days:"الثلاثاء - الخميس",
+days:"الأحد - الأربعاء",
 
-time:"٦:٣٠ مساءً"
+time:"5:00 مساءً"
 
 }
 
@@ -87,6 +67,8 @@ time:"٦:٣٠ مساءً"
 },
 
 {
+
+stage:"prep",
 
 number:"3",
 
@@ -98,9 +80,9 @@ groups:[
 
 title:"المجموعة الأولى",
 
-days:"الأحد - الثلاثاء",
+days:"السبت - الثلاثاء",
 
-time:"٨:٠٠ مساءً"
+time:"3:00 مساءً"
 
 },
 
@@ -108,9 +90,33 @@ time:"٨:٠٠ مساءً"
 
 title:"المجموعة الثانية",
 
-days:"الجمعة",
+days:"الأحد - الأربعاء",
 
-time:"١:٣٠ مساءً"
+time:"4:00 مساءً"
+
+}
+
+]
+
+},
+
+{
+
+stage:"sec",
+
+number:"1",
+
+title:"أولى ثانوي",
+
+groups:[
+
+{
+
+title:"المجموعة الأولى",
+
+days:"السبت - الثلاثاء",
+
+time:"6:00 مساءً"
 
 }
 
@@ -137,17 +143,7 @@ const formulas=[
 
 "A = πr²",
 
-"a² + b² = c²",
-
-"مساحة المثلث",
-
-"محيط الدائرة",
-
-"مساحة المستطيل",
-
-"مساحة شبه المنحرف",
-
-"V = L × W × H",
+"a²+b²=c²",
 
 "sin θ",
 
@@ -157,18 +153,17 @@ const formulas=[
 
 ];
 
-
-/*=========================================
-        إنشاء الخلفية
-=========================================*/
-
-const isDesktop = window.innerWidth > 768;
-
 const background=document.getElementById("math-background");
 
 if(background){
 
-const total = isDesktop ? 90 : 12;
+const total=
+
+window.innerWidth>768
+
+?20
+
+:8;
 
 for(let i=0;i<total;i++){
 
@@ -176,7 +171,9 @@ const item=document.createElement("div");
 
 item.className="math-item";
 
-item.innerHTML=formulas[
+item.innerHTML=
+
+formulas[
 
 Math.floor(
 
@@ -192,15 +189,11 @@ item.style.top=Math.random()*100+"%";
 
 item.style.fontSize=
 
-16+Math.random()*20+"px";
+14+Math.random()*16+"px";
 
 item.style.animationDuration=
 
-20+Math.random()*25+"s";
-
-item.style.animationDelay=
-
--Math.random()*20+"s";
+20+Math.random()*10+"s";
 
 background.appendChild(item);
 
@@ -213,35 +206,30 @@ background.appendChild(item);
         شاشة التحميل
 =========================================*/
 
-const loading=document.getElementById("loading-screen");
-
 window.addEventListener("load",()=>{
 
-setTimeout(()=>{
+const loading=
 
-if(loading){
+document.getElementById("loading-screen");
+
+setTimeout(()=>{
 
 loading.style.opacity="0";
 
 loading.style.visibility="hidden";
 
-}
-
-},600);
+},500);
 
 });
-
-/*==================================================
-            script.js
-              PART 2
-==================================================*/
 
 
 /*=========================================
         إنشاء الكروت
 =========================================*/
 
-const cardsContainer=document.getElementById("schedule-cards");
+const cardsContainer=
+
+document.getElementById("schedule-cards");
 
 if(cardsContainer){
 
@@ -279,9 +267,11 @@ ${group.time}
 
 });
 
+
 const card=document.createElement("div");
 
 card.className="flip-card reveal";
+card.dataset.stage=grade.stage;
 
 card.innerHTML=`
 
@@ -319,6 +309,36 @@ ${grade.groups.length} مجموعات
 
 ${groupsHTML}
 
+<div class="schedule-actions">
+
+<a
+
+href="https://wa.me/201005339671"
+
+target="_blank"
+
+class="whatsapp-btn">
+
+<i class="fa-brands fa-whatsapp"></i>
+
+احجز واتساب
+
+</a>
+
+<a
+
+href="tel:01005339671"
+
+class="call-btn">
+
+<i class="fa-solid fa-phone"></i>
+
+اتصل الآن
+
+</a>
+
+</div>
+
 </div>
 
 </div>
@@ -329,212 +349,182 @@ cardsContainer.appendChild(card);
 
 });
 
-const flipCards=document.querySelectorAll('.flip-card');
 
-flipCards.forEach(card=>{
-	card.addEventListener('click',()=>{
-		card.classList.toggle('is-flipped');
-	});
+document.querySelectorAll(".flip-card")
+
+.forEach(card=>{
+
+card.addEventListener("click",()=>{
+
+card.classList.toggle("is-flipped");
+
+});
+
 });
 
 }
+/*=========================================
+        Reveal Animation
+=========================================*/
+
+const revealItems = document.querySelectorAll(".reveal");
+
+function revealOnScroll(){
+
+    const trigger = window.innerHeight - 100;
+
+    revealItems.forEach(item=>{
+
+        const top = item.getBoundingClientRect().top;
+
+        if(top < trigger){
+
+            item.classList.add("active");
+
+        }
+
+    });
+
+}
+
+window.addEventListener("scroll",revealOnScroll);
+
+revealOnScroll();
 
 
 /*=========================================
-        Scroll Reveal
+        Hero Button
 =========================================*/
 
-const revealElements=document.querySelectorAll(".reveal");
+const heroButton = document.querySelector(".hero-btn");
 
-function reveal(){
+if(heroButton){
 
-revealElements.forEach(item=>{
+    heroButton.addEventListener("click",(e)=>{
 
-const top=item.getBoundingClientRect().top;
+        e.preventDefault();
 
-if(top<window.innerHeight-100){
+        document.querySelector("#schedule")
 
-item.classList.add("active");
+        .scrollIntoView({
 
-}
+            behavior:"smooth"
 
-});
+        });
 
-}
-
-if(window.innerWidth > 768){
-
-window.addEventListener("scroll",reveal);
-
-reveal();
+    });
 
 }
-
-
-/*=========================================
-        زر عرض المواعيد
-=========================================*/
-
-const heroBtn=document.querySelector(".hero-btn");
-
-if(heroBtn){
-
-heroBtn.addEventListener("click",function(e){
-
-e.preventDefault();
-
-document.getElementById("schedule").scrollIntoView({
-
-behavior:"smooth"
-
-});
-
-});
-
-}
-
-/*==================================================
-            script.js
-              PART 3
-==================================================*/
 
 
 /*=========================================
         Back To Top
 =========================================*/
 
-const backToTop=document.getElementById("backToTop");
-
-if(backToTop){
+const backToTop = document.getElementById("backToTop");
 
 window.addEventListener("scroll",()=>{
 
-if(window.scrollY>400){
+    if(window.scrollY > 400){
 
-backToTop.style.display="flex";
+        backToTop.style.display="flex";
 
-}else{
+    }else{
 
-backToTop.style.display="none";
+        backToTop.style.display="none";
 
-}
+    }
 
 });
 
 backToTop.addEventListener("click",()=>{
 
-window.scrollTo({
+    window.scrollTo({
 
-top:0,
+        top:0,
 
-behavior:"smooth"
+        behavior:"smooth"
+
+    });
 
 });
-
-});
-
-}
 
 
 /*=========================================
-        Ripple Effect
+        Navbar Effect
 =========================================*/
 
-if(isDesktop){
-document.querySelectorAll(
+const navbar = document.querySelector(".navbar");
 
-".hero-btn,.contact-card,#backToTop,.floating-whatsapp"
-
-).forEach(button=>{
-
-button.addEventListener("click",function(e){
-
-const ripple=document.createElement("span");
-
-const rect=this.getBoundingClientRect();
-
-const size=Math.max(rect.width,rect.height);
-
-ripple.className="ripple";
-
-ripple.style.width=size+"px";
-
-ripple.style.height=size+"px";
-
-ripple.style.left=(e.clientX-rect.left-size/2)+"px";
-
-ripple.style.top=(e.clientY-rect.top-size/2)+"px";
-
-this.appendChild(ripple);
-
-setTimeout(()=>{
-
-ripple.remove();
-
-},600);
-
-});
-
-});
-}
-
-
-/*=========================================
-        تغيير شكل الـ Header
-=========================================*/
-
-const header=document.querySelector(".navbar");
-
-if(header){
-
-let lastScroll=0;
+let lastScroll = 0;
 
 window.addEventListener("scroll",()=>{
 
-const current=window.pageYOffset;
+    const current = window.pageYOffset;
 
-if(window.scrollY>60){
+    if(current > 60){
 
-header.style.background="rgba(8,8,8,.9)";
+        navbar.style.background="rgba(8,8,8,.92)";
 
-header.style.backdropFilter="blur(25px)";
+        navbar.style.boxShadow=
 
-header.style.boxShadow="0 10px 30px rgba(0,0,0,.4)";
+        "0 10px 25px rgba(0,0,0,.22)";
 
-}else{
+    }else{
 
-header.style.background="rgba(8,8,8,.55)";
+        navbar.style.background="rgba(8,8,8,.82)";
 
-header.style.boxShadow="none";
+        navbar.style.boxShadow="none";
 
-}
+    }
 
-if(current>lastScroll && current>80){
+    if(current > lastScroll && current > 120){
 
-header.style.transform="translateY(-100%)";
+        navbar.style.transform="translateY(-100%)";
 
-}else{
+    }else{
 
-header.style.transform="translateY(0)";
+        navbar.style.transform="translateY(0)";
 
-}
+    }
 
-lastScroll=current;
+    lastScroll=current;
 
 });
 
-}
+
+/*=========================================
+        Flip Outside Close
+=========================================*/
+
+document.addEventListener("click",(e)=>{
+
+    document.querySelectorAll(".flip-card").forEach(card=>{
+
+        if(!card.contains(e.target)){
+
+            card.classList.remove("is-flipped");
+
+        }
+
+    });
+
+});
 
 
 /*=========================================
-        تأثير بسيط للكروت
+        Card Hover
 =========================================*/
 
-document.querySelectorAll(".flip-card").forEach(card=>{
+if(window.innerWidth > 768){
+
+document.querySelectorAll(".flip-card")
+
+.forEach(card=>{
 
 card.addEventListener("mouseenter",()=>{
 
-card.style.transition=".35s";
+card.style.transition=".3s";
 
 });
 
@@ -546,121 +536,28 @@ card.style.transform="translateY(0px)";
 
 });
 
-/*==================================================
-            script.js
-              FINAL PART
-==================================================*/
+}
 
 
 /*=========================================
-        Mouse Glow
+        Performance
 =========================================*/
 
-if(isDesktop){
+window.addEventListener("resize",()=>{
 
-const glow=document.createElement("div");
+if(window.innerWidth < 768){
 
-glow.className="mouse-glow";
+document.querySelectorAll(".flip-card")
 
-document.body.appendChild(glow);
+.forEach(card=>{
 
-document.addEventListener("mousemove",(e)=>{
-
-glow.style.left=e.clientX+"px";
-
-glow.style.top=e.clientY+"px";
-
-});
-
-
-/*=========================================
-        3D Tilt Effect
-=========================================*/
-
-document.querySelectorAll(".flip-card").forEach(card=>{
-
-card.addEventListener("mousemove",(e)=>{
-
-const rect=card.getBoundingClientRect();
-
-const x=e.clientX-rect.left;
-
-const y=e.clientY-rect.top;
-
-const centerX=rect.width/2;
-
-const centerY=rect.height/2;
-
-const rotateY=(x-centerX)/18;
-
-const rotateX=(centerY-y)/18;
-
-card.style.transform=
-
-`perspective(1000px)
- rotateX(${rotateX}deg)
- rotateY(${rotateY}deg)
- scale(1.03)`;
-
-});
-
-card.addEventListener("mouseleave",()=>{
-
-card.style.transform=
-
-"perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
-
-});
+card.style.transform="none";
 
 });
 
 }
 
-
-/*=========================================
-        تحريك الخلفية
-=========================================*/
-
-if(window.innerWidth > 768){
-
-setInterval(()=>{
-
-document.querySelectorAll(".math-item").forEach(item=>{
-
-item.style.opacity=(0.05+Math.random()*0.12);
-
 });
-
-},2500);
-}
-
-
-/*=========================================
-        Hero Fade
-=========================================*/
-
-const hero=document.querySelector(".hero");
-
-if(hero){
-
-hero.style.opacity="1";
-
-hero.style.transform="translateY(0px)";
-
-if(window.innerWidth > 768){
-
-window.addEventListener("scroll",()=>{
-
-const value=window.scrollY;
-
-hero.style.opacity=1-value/700;
-
-hero.style.transform=`translateY(${value*0.18}px)`;
-
-});
-
-}
-}
 
 
 /*=========================================
@@ -673,14 +570,94 @@ console.log(
 
 "%cالأستاذ محمد عيد",
 
-"color:#ff9800;font-size:28px;font-weight:bold"
+"color:#f59e0b;font-size:28px;font-weight:bold"
 
 );
 
 console.log(
 
-"%cMath Website Version 8",
+"%cMath Website Version 9",
 
-"color:white;font-size:16px"
+"color:#ffffff;font-size:16px"
 
 );
+/*==============================
+        Tabs
+==============================*/
+
+const tabs=document.querySelectorAll(".tab-btn");
+
+tabs.forEach(tab=>{
+
+tab.onclick=()=>{
+
+tabs.forEach(btn=>btn.classList.remove("active"));
+
+tab.classList.add("active");
+
+const stage=tab.dataset.stage;
+
+document.querySelectorAll(".flip-card").forEach(card=>{
+
+card.style.display=
+
+card.dataset.stage===stage
+
+?"block"
+
+:"none";
+
+});
+
+};
+
+});
+/*==============================
+        Default Tab
+==============================*/
+
+document.querySelectorAll(".flip-card").forEach(card=>{
+
+card.style.display=
+
+card.dataset.stage==="prep"
+
+?"block"
+
+:"none";
+
+});
+
+document.querySelector(".tab-btn[data-stage='prep']")
+.classList.add("active");
+/*==============================
+        Scroll Reveal
+==============================*/
+
+const observer=new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.classList.add("active");
+
+}
+
+});
+
+},
+
+{
+
+threshold:.15
+
+});
+
+document.querySelectorAll(".reveal")
+
+.forEach(section=>{
+
+observer.observe(section);
+
+});
