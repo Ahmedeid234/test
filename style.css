@@ -2378,12 +2378,12 @@ transform:translateY(-8px);
     box-shadow:0 0 35px rgba(245,158,11,.35);
     margin:30px auto;   /* يخليها في النص */
     position:relative;
-    /* امسح السطر ده: outline:8px solid red; */
+    transform:translateY(var(--parallax-y,0px));
 }
 
 .hero-photo:hover{
 
-transform:scale(1.05);
+transform:translateY(var(--parallax-y,0px)) scale(1.05);
 
 }
 .hero::before{
@@ -2413,6 +2413,997 @@ top:-100px;
 right:-120px;
 
 filter:blur(20px);
+
+}
+
+/*==================================================
+        المرحلة 1: Scroll Snap + Animations
+        Phase 1 Upgrade
+==================================================*/
+
+/*==========================
+        Scroll Snap
+==========================*/
+
+html{
+
+scroll-snap-type:y mandatory;
+
+scroll-padding-top:100px;
+
+}
+
+.hero,
+.benefits-section,
+.about-section,
+.schedule-section,
+.contact-section,
+footer{
+
+scroll-snap-align:start;
+
+scroll-snap-stop:normal;
+
+}
+
+@media(max-width:768px){
+
+html{
+
+scroll-snap-type:none;
+
+}
+
+}
+
+/*==========================
+        Hero Entrance
+==========================*/
+
+.hero-photo{
+
+opacity:0;
+
+transform:scale(.6) translateY(-20px);
+
+animation:heroPhotoIn 1s cubic-bezier(.22,1,.36,1) .1s forwards;
+
+}
+
+.hero-top{
+
+opacity:0;
+
+transform:translateY(-15px);
+
+animation:heroFadeUp .8s ease .35s forwards;
+
+}
+
+.hero h1{
+
+opacity:0;
+
+transform:translateY(35px);
+
+animation:heroFadeUp .9s ease .5s forwards;
+
+}
+
+.hero h3{
+
+opacity:0;
+
+transform:translateY(30px);
+
+animation:heroFadeUp .9s ease .65s forwards;
+
+}
+
+.hero p{
+
+opacity:0;
+
+transform:translateY(25px);
+
+animation:heroFadeUp .9s ease .8s forwards;
+
+}
+
+.hero-actions .hero-btn{
+
+opacity:0;
+
+transform:translateY(20px) scale(.95);
+
+animation:heroFadeUp .7s ease forwards;
+
+}
+
+.hero-actions .hero-btn:first-child{
+
+animation-delay:.95s;
+
+}
+
+.hero-actions .hero-btn.secondary{
+
+animation-delay:1.1s;
+
+}
+
+.hero-stats .stat-card{
+
+opacity:0;
+
+transform:translateY(25px);
+
+animation:heroFadeUp .7s ease forwards;
+
+}
+
+.hero-stats .stat-card:nth-child(1){animation-delay:1.25s;}
+.hero-stats .stat-card:nth-child(2){animation-delay:1.4s;}
+.hero-stats .stat-card:nth-child(3){animation-delay:1.55s;}
+
+@keyframes heroPhotoIn{
+
+to{
+
+opacity:1;
+
+transform:scale(1) translateY(0);
+
+}
+
+}
+
+@keyframes heroFadeUp{
+
+to{
+
+opacity:1;
+
+transform:translateY(0) scale(1);
+
+}
+
+}
+
+/*==========================
+        Reveal Upgrade
+==========================*/
+
+.reveal{
+
+opacity:0;
+
+transform:translateY(55px) scale(.98);
+
+filter:blur(6px);
+
+transition:
+
+opacity .9s cubic-bezier(.22,1,.36,1),
+
+transform .9s cubic-bezier(.22,1,.36,1),
+
+filter .9s ease;
+
+}
+
+.reveal.active{
+
+opacity:1;
+
+transform:translateY(0) scale(1);
+
+filter:blur(0);
+
+}
+
+.section-title h2,
+.section-title p{
+
+opacity:0;
+
+transform:translateY(25px);
+
+transition:opacity .8s ease, transform .8s ease;
+
+}
+
+.reveal.active .section-title h2{
+
+opacity:1;
+
+transform:translateY(0);
+
+transition-delay:.05s;
+
+}
+
+.reveal.active .section-title p{
+
+opacity:1;
+
+transform:translateY(0);
+
+transition-delay:.18s;
+
+}
+
+/*==========================
+        Staggered Children
+==========================*/
+
+.benefit-card,
+.about-card,
+.contact-card{
+
+opacity:0;
+
+transform:translateY(45px) scale(.97);
+
+transition:
+
+opacity .7s cubic-bezier(.22,1,.36,1),
+
+transform .7s cubic-bezier(.22,1,.36,1),
+
+border-color .35s,
+
+box-shadow .35s;
+
+transition-delay:calc(var(--i, 0) * .12s);
+
+}
+
+.reveal.active .benefit-card,
+.reveal.active .about-card,
+.reveal.active .contact-card{
+
+opacity:1;
+
+transform:translateY(0) scale(1);
+
+}
+
+.flip-card.reveal{
+
+filter:none;
+
+}
+
+.cards .flip-card{
+
+opacity:0;
+
+transform:translateY(45px) scale(.97);
+
+transition:
+
+opacity .7s cubic-bezier(.22,1,.36,1),
+
+transform .7s cubic-bezier(.22,1,.36,1);
+
+transition-delay:calc(var(--i, 0) * .12s);
+
+animation:none;
+
+}
+
+.cards .flip-card.active{
+
+opacity:1;
+
+transform:translateY(0) scale(1);
+
+}
+
+@media(prefers-reduced-motion:reduce){
+
+.hero-photo,
+.hero-top,
+.hero h1,
+.hero h3,
+.hero p,
+.hero-actions .hero-btn,
+.hero-stats .stat-card{
+
+animation:none!important;
+
+opacity:1!important;
+
+transform:none!important;
+
+}
+
+.reveal,
+.benefit-card,
+.about-card,
+.contact-card,
+.cards .flip-card{
+
+filter:none!important;
+
+}
+
+}
+
+/*==================================================
+        المرحلة 2: عدادات + حلقة تقدم + رسم بياني
+==================================================*/
+
+.stat-card strong{
+
+font-variant-numeric:tabular-nums;
+
+}
+
+.ring-card{
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+}
+
+.progress-ring{
+
+position:relative;
+
+width:110px;
+
+height:110px;
+
+margin:0 auto 14px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+}
+
+.progress-ring svg{
+
+position:absolute;
+
+inset:0;
+
+width:100%;
+
+height:100%;
+
+transform:rotate(-90deg);
+
+}
+
+.ring-bg{
+
+fill:none;
+
+stroke:rgba(255,255,255,.08);
+
+stroke-width:8;
+
+}
+
+.ring-fill{
+
+fill:none;
+
+stroke:var(--main);
+
+stroke-width:8;
+
+stroke-linecap:round;
+
+stroke-dasharray:264;
+
+stroke-dashoffset:264;
+
+transition:stroke-dashoffset 1.6s cubic-bezier(.22,1,.36,1);
+
+}
+
+.ring-card strong{
+
+position:relative;
+
+font-size:26px;
+
+margin-bottom:0;
+
+}
+
+.bg-graph{
+
+position:absolute;
+
+inset:0;
+
+width:100%;
+
+height:100%;
+
+opacity:.12;
+
+pointer-events:none;
+
+z-index:0;
+
+}
+
+.bg-graph-line{
+
+fill:none;
+
+stroke:var(--main);
+
+stroke-width:3;
+
+stroke-linecap:round;
+
+stroke-linejoin:round;
+
+stroke-dasharray:1400;
+
+stroke-dashoffset:1400;
+
+transition:stroke-dashoffset 2.2s cubic-bezier(.22,1,.36,1);
+
+}
+
+.benefits-section.active .bg-graph-line,
+.reveal.active .bg-graph-line{
+
+stroke-dashoffset:0;
+
+}
+
+.bg-graph-dot{
+
+fill:var(--main);
+
+opacity:0;
+
+transition:opacity .6s ease 1.8s;
+
+}
+
+.reveal.active .bg-graph-dot{
+
+opacity:1;
+
+}
+
+.benefits-section .container{
+
+position:relative;
+
+z-index:1;
+
+}
+
+/*==================================================
+        المرحلة 3: Parallax + Cursor Glow + Ripple
+==================================================*/
+
+@media(hover:hover) and (pointer:fine){
+
+#cursor-glow{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:420px;
+
+height:420px;
+
+border-radius:50%;
+
+background:radial-gradient(
+
+circle,
+
+rgba(245,158,11,.14),
+
+transparent 70%
+
+);
+
+pointer-events:none;
+
+z-index:5;
+
+transform:translate(-50%,-50%);
+
+will-change:transform;
+
+transition:opacity .3s ease;
+
+opacity:0;
+
+}
+
+#cursor-glow.visible{
+
+opacity:1;
+
+}
+
+}
+
+.ripple{
+
+position:absolute;
+
+border-radius:50%;
+
+background:rgba(255,255,255,.45);
+
+transform:scale(0);
+
+animation:rippleAnim .6s ease-out;
+
+pointer-events:none;
+
+}
+
+@keyframes rippleAnim{
+
+to{
+
+transform:scale(2.6);
+
+opacity:0;
+
+}
+
+}
+
+.hero-btn,
+.footer-btn,
+.tab-btn,
+.whatsapp-btn,
+.call-btn{
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+/*==========================
+        Shine Sweep Hover
+==========================*/
+
+@media(hover:hover) and (pointer:fine){
+
+.benefit-card,
+.about-card,
+.contact-card,
+.stat-card{
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+.benefit-card::after,
+.about-card::after,
+.contact-card::after,
+.stat-card::after{
+
+content:"";
+
+position:absolute;
+
+top:0;
+
+left:-60%;
+
+width:40%;
+
+height:100%;
+
+background:linear-gradient(
+
+115deg,
+
+transparent,
+
+rgba(255,255,255,.09),
+
+transparent
+
+);
+
+transform:skewX(-20deg);
+
+transition:left .7s ease;
+
+pointer-events:none;
+
+}
+
+.benefit-card:hover::after,
+.about-card:hover::after,
+.contact-card:hover::after,
+.stat-card:hover::after{
+
+left:140%;
+
+}
+
+}
+
+/*==========================
+        Parallax targets
+==========================*/
+
+.hero-photo,
+#math-background{
+
+will-change:transform;
+
+}
+
+/*==================================================
+        المرحلة 4: Loading Screen + الأداء
+==================================================*/
+
+.loader-formulas{
+
+position:absolute;
+
+inset:0;
+
+overflow:hidden;
+
+pointer-events:none;
+
+}
+
+.loader-formula{
+
+position:absolute;
+
+color:rgba(245,158,11,.25);
+
+font-weight:800;
+
+animation:loaderFormulaFloat linear infinite;
+
+}
+
+@keyframes loaderFormulaFloat{
+
+0%{
+
+transform:translateY(20px);
+
+opacity:0;
+
+}
+
+10%{
+
+opacity:1;
+
+}
+
+90%{
+
+opacity:1;
+
+}
+
+100%{
+
+transform:translateY(-40px);
+
+opacity:0;
+
+}
+
+}
+
+@media(max-width:768px){
+
+#cursor-glow{
+
+display:none;
+
+}
+
+}
+
+@media(prefers-reduced-motion:reduce){
+
+.ring-fill,
+.bg-graph-line,
+.bg-graph-dot{
+
+transition:none!important;
+
+}
+
+.loader-formula{
+
+animation:none!important;
+
+opacity:0!important;
+
+}
+
+.ripple{
+
+animation:none!important;
+
+display:none!important;
+
+}
+
+}
+
+/*==========================
+        Section Transition Overlay
+==========================*/
+
+#section-transition{
+
+position:fixed;
+
+inset:0;
+
+background:#050505;
+
+opacity:0;
+
+pointer-events:none;
+
+z-index:99998;
+
+transition:opacity .35s ease;
+
+}
+
+#section-transition.active{
+
+opacity:.4;
+
+}
+
+@media(max-width:768px){
+
+#section-transition{
+
+display:none;
+
+}
+
+}
+
+/*==================================================
+        تحسينات الموبايل والتصفح من عليه
+==================================================*/
+
+@media(max-width:768px){
+
+html{
+
+scroll-padding-top:80px;
+
+}
+
+/* الصورة في الهيرو تبقى أنسب لمساحة الموبايل */
+
+.hero-photo{
+
+width:130px;
+
+height:130px;
+
+margin:20px auto;
+
+border-width:4px;
+
+}
+
+.hero{
+
+padding:110px 16px 60px;
+
+}
+
+.hero::before{
+
+width:260px;
+
+height:260px;
+
+top:-60px;
+
+right:-80px;
+
+}
+
+/* حلقة التقدم أصغر شوية على الموبايل */
+
+.progress-ring{
+
+width:92px;
+
+height:92px;
+
+}
+
+.ring-card strong{
+
+font-size:22px;
+
+}
+
+/* الرسم البياني في الخلفية يبقى أخف على الموبايل */
+
+.bg-graph{
+
+opacity:.07;
+
+}
+
+/* تقليل عدد المعادلات العائمة داخل شاشة التحميل */
+
+.loader-formula:nth-child(n+7){
+
+display:none;
+
+}
+
+/* التأكد إن الأزرار والكروت بمساحة لمس مريحة */
+
+.hero-btn,
+.footer-btn,
+.tab-btn{
+
+min-height:50px;
+
+}
+
+.schedule-actions a{
+
+min-height:50px;
+
+}
+
+/* منع أي عناصر تعمل Overflow أفقي على الموبايل */
+
+body{
+
+overflow-x:hidden;
+
+}
+
+.contact-card,
+.benefit-card,
+.about-card{
+
+overflow:hidden;
+
+}
+
+}
+
+@media(max-width:480px){
+
+.hero-photo{
+
+width:105px;
+
+height:105px;
+
+}
+
+.progress-ring{
+
+width:82px;
+
+height:82px;
+
+}
+
+.ring-card strong{
+
+font-size:19px;
+
+}
+
+}
+
+/*==================================================
+        شريط واتساب ثابت (موبايل فقط)
+==================================================*/
+
+.floating-whatsapp-mobile{
+
+display:none;
+
+}
+
+@media(max-width:768px){
+
+.floating-whatsapp-mobile{
+
+display:flex;
+
+position:fixed;
+
+bottom:0;
+
+left:0;
+
+right:0;
+
+height:56px;
+
+background:#25D366;
+
+color:#fff;
+
+align-items:center;
+
+justify-content:center;
+
+gap:10px;
+
+font-weight:800;
+
+font-size:15px;
+
+z-index:9998;
+
+box-shadow:0 -6px 20px rgba(0,0,0,.35);
+
+}
+
+.floating-whatsapp-mobile i{
+
+font-size:20px;
+
+}
+
+.floating-whatsapp-mobile:active{
+
+background:#1fb959;
+
+}
+
+/* رفع زرار الفيسبوك والرجوع لفوق عشان مايتغطوش بشريط الواتساب */
+
+.floating-facebook,
+#backToTop{
+
+bottom:74px;
+
+}
+
+/* مساحة فاضية آخر الصفحة عشان الفوتر مايتغطاش بالشريط */
+
+footer{
+
+padding-bottom:130px;
+
+}
 
 }
 
