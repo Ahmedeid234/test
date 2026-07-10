@@ -53,10 +53,22 @@
 
     <div class="loader-formulas" id="loader-formulas"></div>
 
-    <img
-    src="mohamed-eid.jpg"
-    class="loading-photo"
-    alt="محمد عيد">
+    <div class="loader-photo-ring">
+
+        <svg viewBox="0 0 120 120">
+
+            <circle class="loader-ring-bg" cx="60" cy="60" r="54"></circle>
+
+            <circle class="loader-ring-fill" cx="60" cy="60" r="54"></circle>
+
+        </svg>
+
+        <img
+        src="mohamed-eid.jpg"
+        class="loading-photo"
+        alt="محمد عيد">
+
+    </div>
 
     <h2>
 
@@ -76,11 +88,17 @@
 
     </div>
 
-    <p id="loading-text">
+    <div class="loading-meta">
 
-        جاري تحميل المعادلات...
+        <p id="loading-text">
 
-    </p>
+            جاري تحميل المعادلات...
+
+        </p>
+
+        <span id="loading-percent">0%</span>
+
+    </div>
 
 </div>
 
@@ -594,24 +612,6 @@ target="_blank"
 class="floating-facebook">
 
 <i class="fa-brands fa-facebook-f"></i>
-
-</a>
-
-<!-- ===========================
-    Floating WhatsApp (Mobile Only)
-=========================== -->
-
-<a
-
-href="https://wa.me/201005339671"
-
-target="_blank"
-
-class="floating-whatsapp-mobile">
-
-<i class="fa-brands fa-whatsapp"></i>
-
-<span>احجز واتساب</span>
 
 </a>
 
