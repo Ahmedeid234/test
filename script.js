@@ -1,7 +1,7 @@
 /*==================================================
         الأستاذ محمد عيد
         script.js
-        Version 9
+        Version 10 - Phase 1 Upgrade
 ==================================================*/
 
 /*=========================================
@@ -203,6 +203,62 @@ background.appendChild(item);
 
 
 /*=========================================
+        معادلات شاشة التحميل
+=========================================*/
+
+const loaderFormulasBox=document.getElementById("loader-formulas");
+
+if(loaderFormulasBox){
+
+const formulaCount=window.innerWidth>768?10:6;
+
+for(let i=0;i<formulaCount;i++){
+
+const f=document.createElement("span");
+
+f.className="loader-formula";
+
+f.textContent=formulas[Math.floor(Math.random()*formulas.length)];
+
+f.style.left=Math.random()*100+"%";
+
+f.style.top=Math.random()*100+"%";
+
+f.style.fontSize=12+Math.random()*10+"px";
+
+f.style.animationDuration=2.5+Math.random()*2+"s";
+
+f.style.animationDelay=Math.random()*1.5+"s";
+
+loaderFormulasBox.appendChild(f);
+
+}
+
+}
+
+/*=========================================
+        تحرير الترانسفورم بعد أنيميشن الدخول
+=========================================*/
+
+const heroPhotoAnim=document.querySelector(".hero-photo");
+
+if(heroPhotoAnim){
+
+heroPhotoAnim.addEventListener("animationend",()=>{
+
+/* تثبيت الشفافية بس، وترك الترانسفورم لمتغير CSS عشان يتماشى مع الـ parallax والـ hover */
+
+heroPhotoAnim.style.opacity="1";
+
+heroPhotoAnim.style.animation="none";
+
+heroPhotoAnim.style.setProperty("--parallax-y","0px");
+
+},{once:true});
+
+}
+
+/*=========================================
         شاشة التحميل
 =========================================*/
 
@@ -351,7 +407,9 @@ cardsContainer.appendChild(card);
 
 document.querySelectorAll(".flip-card")
 
-.forEach(card=>{
+.forEach((card,index)=>{
+
+card.style.setProperty("--i",index);
 
 card.addEventListener("click",()=>{
 
@@ -363,32 +421,9 @@ card.classList.toggle("is-flipped");
 
 }
 /*=========================================
-        Reveal Animation
+        Reveal Animation (يتم التعامل معاه
+        عبر IntersectionObserver في آخر الملف)
 =========================================*/
-
-const revealItems = document.querySelectorAll(".reveal");
-
-function revealOnScroll(){
-
-    const trigger = window.innerHeight - 100;
-
-    revealItems.forEach(item=>{
-
-        const top = item.getBoundingClientRect().top;
-
-        if(top < trigger){
-
-            item.classList.add("active");
-
-        }
-
-    });
-
-}
-
-window.addEventListener("scroll",revealOnScroll);
-
-revealOnScroll();
 
 
 /*=========================================
@@ -596,15 +631,39 @@ tab.classList.add("active");
 
 const stage=tab.dataset.stage;
 
+let visibleIndex=0;
+
 document.querySelectorAll(".flip-card").forEach(card=>{
 
-card.style.display=
+const isVisible=card.dataset.stage===stage;
 
-card.dataset.stage===stage
+if(isVisible){
 
-?"block"
+card.classList.remove("active");
 
-:"none";
+card.style.display="block";
+
+card.style.setProperty("--i",visibleIndex);
+
+visibleIndex++;
+
+/* إعادة تشغيل الأنيميشن مع كل تبديل تبويب */
+
+requestAnimationFrame(()=>{
+
+requestAnimationFrame(()=>{
+
+card.classList.add("active");
+
+});
+
+});
+
+}else{
+
+card.style.display="none";
+
+}
 
 });
 
@@ -633,6 +692,18 @@ document.querySelector(".tab-btn[data-stage='prep']")
         Scroll Reveal
 ==============================*/
 
+/* ترقيم كروت المميزات وطريقة العمل والتواصل عشان الأنيميشن المتدرج */
+
+document.querySelectorAll(
+
+".benefits-grid .benefit-card, .about-grid .about-card, .contact-container .contact-card"
+
+).forEach((el,index)=>{
+
+el.style.setProperty("--i",index);
+
+});
+
 const observer=new IntersectionObserver(entries=>{
 
 entries.forEach(entry=>{
@@ -660,3 +731,378 @@ document.querySelectorAll(".reveal")
 observer.observe(section);
 
 });
+
+/* أنيميشن دخول كروت المواعيد عند الظهور في الشاشة */
+
+const cardObserver=new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.classList.add("active");
+
+}
+
+});
+
+},
+
+{
+
+threshold:.15
+
+});
+
+document.querySelectorAll(".flip-card")
+
+.forEach(card=>{
+
+cardObserver.observe(card);
+
+});
+
+/*==================================================
+        التنقل الكامل بين السيكشنز
+        كل سكرول يودي للجزء اللي بعده مباشرة
+==================================================*/
+
+const mainSections=document.querySelectorAll(
+
+".hero, .benefits-section, .about-section, .schedule-section, .contact-section, footer"
+
+);
+
+if(mainSections.length && window.innerWidth>768){
+
+const transitionOverlay=document.createElement("div");
+
+transitionOverlay.id="section-transition";
+
+document.body.appendChild(transitionOverlay);
+
+let currentSectionIndex=0;
+
+let isAutoScrolling=false;
+
+let wheelCooldown=false;
+
+/* تحديث السيكشن الحالي حسب الظاهر على الشاشة */
+
+const sectionTracker=new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting && entry.intersectionRatio>.6 && !isAutoScrolling){
+
+currentSectionIndex=
+
+Array.from(mainSections).indexOf(entry.target);
+
+}
+
+});
+
+},{threshold:[.6]});
+
+mainSections.forEach(sec=>sectionTracker.observe(sec));
+
+function goToSection(index){
+
+if(index<0||index>=mainSections.length)return;
+
+isAutoScrolling=true;
+
+currentSectionIndex=index;
+
+transitionOverlay.classList.add("active");
+
+setTimeout(()=>{
+
+mainSections[index].scrollIntoView({behavior:"smooth"});
+
+},120);
+
+setTimeout(()=>{
+
+transitionOverlay.classList.remove("active");
+
+},420);
+
+setTimeout(()=>{
+
+isAutoScrolling=false;
+
+},1000);
+
+}
+
+window.addEventListener("wheel",(e)=>{
+
+if(wheelCooldown||isAutoScrolling)return;
+
+wheelCooldown=true;
+
+setTimeout(()=>{wheelCooldown=false;},900);
+
+if(e.deltaY>25){
+
+goToSection(currentSectionIndex+1);
+
+}else if(e.deltaY<-25){
+
+goToSection(currentSectionIndex-1);
+
+}
+
+},{passive:true});
+
+/* دعم السوايب على الشاشات اللي بتدعم اللمس مع الماوس (تابلت) */
+
+let touchStartY=0;
+
+window.addEventListener("touchstart",(e)=>{
+
+touchStartY=e.touches[0].clientY;
+
+},{passive:true});
+
+window.addEventListener("touchend",(e)=>{
+
+if(wheelCooldown||isAutoScrolling)return;
+
+const diff=touchStartY-e.changedTouches[0].clientY;
+
+if(Math.abs(diff)<60)return;
+
+wheelCooldown=true;
+
+setTimeout(()=>{wheelCooldown=false;},900);
+
+if(diff>0){
+
+goToSection(currentSectionIndex+1);
+
+}else{
+
+goToSection(currentSectionIndex-1);
+
+}
+
+},{passive:true});
+
+}
+
+/*==================================================
+        المرحلة 2: العدادات المتحركة
+==================================================*/
+
+function animateCounter(el){
+
+const target=parseFloat(el.dataset.target);
+
+const prefix=el.dataset.prefix||"";
+
+const suffix=el.dataset.suffix!==undefined?el.dataset.suffix:"";
+
+const duration=1600;
+
+const start=performance.now();
+
+function step(now){
+
+const progress=Math.min((now-start)/duration,1);
+
+const eased=1-Math.pow(1-progress,3);
+
+const value=Math.round(target*eased);
+
+el.textContent=prefix+value+suffix;
+
+if(progress<1){
+
+requestAnimationFrame(step);
+
+}else{
+
+el.textContent=prefix+target+suffix;
+
+}
+
+}
+
+requestAnimationFrame(step);
+
+}
+
+const statCounters=document.querySelectorAll(".stat-card strong[data-target]");
+
+const ringFill=document.querySelector(".ring-fill");
+
+let countersStarted=false;
+
+function startCounters(){
+
+if(countersStarted)return;
+
+countersStarted=true;
+
+statCounters.forEach(el=>animateCounter(el));
+
+if(ringFill){
+
+const percent=parseFloat(
+
+document.querySelector(".ring-card strong").dataset.target
+
+);
+
+const circumference=264;
+
+const offset=circumference-(circumference*percent/100);
+
+requestAnimationFrame(()=>{
+
+ringFill.style.strokeDashoffset=offset;
+
+});
+
+}
+
+}
+
+if(statCounters.length){
+
+const statsObserver=new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+startCounters();
+
+statsObserver.disconnect();
+
+}
+
+});
+
+},{threshold:.4});
+
+statsObserver.observe(document.querySelector(".hero-stats"));
+
+}
+
+/*==================================================
+        المرحلة 3: Ripple Effect
+==================================================*/
+
+document.querySelectorAll(
+
+".hero-btn, .footer-btn, .tab-btn, .whatsapp-btn, .call-btn"
+
+).forEach(btn=>{
+
+btn.addEventListener("click",function(e){
+
+const rect=this.getBoundingClientRect();
+
+const ripple=document.createElement("span");
+
+const size=Math.max(rect.width,rect.height);
+
+ripple.className="ripple";
+
+ripple.style.width=ripple.style.height=size+"px";
+
+ripple.style.left=(e.clientX-rect.left-size/2)+"px";
+
+ripple.style.top=(e.clientY-rect.top-size/2)+"px";
+
+this.appendChild(ripple);
+
+setTimeout(()=>ripple.remove(),650);
+
+});
+
+});
+
+/*==================================================
+        المرحلة 3: Cursor Glow
+==================================================*/
+
+if(window.matchMedia("(hover:hover) and (pointer:fine)").matches){
+
+const glow=document.createElement("div");
+
+glow.id="cursor-glow";
+
+document.body.appendChild(glow);
+
+let glowX=0,glowY=0,visible=false;
+
+document.addEventListener("mousemove",e=>{
+
+glowX=e.clientX;
+
+glowY=e.clientY;
+
+glow.style.transform=`translate(${glowX}px, ${glowY}px) translate(-50%, -50%)`;
+
+if(!visible){
+
+glow.classList.add("visible");
+
+visible=true;
+
+}
+
+});
+
+document.addEventListener("mouseleave",()=>{
+
+glow.classList.remove("visible");
+
+visible=false;
+
+});
+
+}
+
+/*==================================================
+        المرحلة 3: Parallax خفيف
+==================================================*/
+
+const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+if(!reduceMotion && window.innerWidth>768){
+
+const heroPhotoEl=document.querySelector(".hero-photo");
+
+let ticking=false;
+
+window.addEventListener("scroll",()=>{
+
+if(!ticking){
+
+requestAnimationFrame(()=>{
+
+const y=window.scrollY;
+
+if(heroPhotoEl){
+
+heroPhotoEl.style.setProperty("--parallax-y",(y*0.15)+"px");
+
+}
+
+ticking=false;
+
+});
+
+ticking=true;
+
+}
+
+},{passive:true});
+
+}
