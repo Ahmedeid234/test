@@ -286,23 +286,63 @@ document.getElementById("loading-screen");
 
 const loadingText=document.getElementById("loading-text");
 
-/* رسائل تحميل متتابعة */
+const loadingPercent=document.getElementById("loading-percent");
+
+const ringFillLoader=document.querySelector(".loader-ring-fill");
+
+const loaderDuration=2200;
+
+const ringCircumference=339.3;
+
+const loaderStart=performance.now();
+
+function loaderStep(now){
+
+const progress=Math.min((now-loaderStart)/loaderDuration,1);
+
+const percent=Math.round(progress*100);
+
+if(loadingPercent){
+
+loadingPercent.textContent=percent+"%";
+
+}
+
+if(ringFillLoader){
+
+ringFillLoader.style.strokeDashoffset=
+
+ringCircumference-(ringCircumference*progress);
+
+}
 
 if(loadingText){
 
-setTimeout(()=>{
+if(percent<40){
+
+loadingText.textContent="جاري تحميل المعادلات...";
+
+}else if(percent<90){
 
 loadingText.textContent="جاري تحميل المجموعات...";
 
-},900);
-
-setTimeout(()=>{
+}else{
 
 loadingText.textContent="جاهز ✔";
 
-},1700);
+}
 
 }
+
+if(progress<1){
+
+requestAnimationFrame(loaderStep);
+
+}
+
+}
+
+requestAnimationFrame(loaderStep);
 
 setTimeout(()=>{
 
@@ -310,7 +350,7 @@ loading.style.opacity="0";
 
 loading.style.visibility="hidden";
 
-},2200);
+},loaderDuration);
 });
 
 
@@ -485,7 +525,7 @@ const tiltValue=`rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
 
 if(front)front.style.transform=tiltValue;
 
-if(back)back.style.transform=`rotateY(180deg) ${tiltValue}`;
+if(back)back.style.transform=tiltValue;
 
 });
 
