@@ -1007,39 +1007,8 @@ will-change:transform;
 }
 
 /*==========================
-        Light Glow
+        Light Glow (تم استبداله بالرمز المائي)
 ==========================*/
-
-.benefit-card::before,
-.about-card::before{
-
-content:"";
-
-position:absolute;
-
-inset:0;
-
-border-radius:24px;
-
-background:linear-gradient(
-
-135deg,
-
-rgba(245,158,11,.05),
-
-transparent,
-
-rgba(37,99,235,.05)
-
-);
-
-opacity:0;
-
-transition:.35s;
-
-pointer-events:none;
-
-}
 
 .benefit-card,
 .about-card{
@@ -1047,13 +1016,6 @@ pointer-events:none;
 position:relative;
 
 overflow:hidden;
-
-}
-
-.benefit-card:hover::before,
-.about-card:hover::before{
-
-opacity:1;
 
 }
 
@@ -1238,6 +1200,52 @@ margin-bottom:20px;
 
 }
 
+/*==========================
+        شارة عدد المجموعات
+==========================*/
+
+.card-front{
+
+position:relative;
+
+}
+
+.group-badge{
+
+position:absolute;
+
+top:18px;
+
+right:18px;
+
+background:rgba(37,99,235,.15);
+
+border:1px solid rgba(37,99,235,.35);
+
+color:var(--blue);
+
+font-size:12px;
+
+font-weight:800;
+
+padding:6px 14px;
+
+border-radius:30px;
+
+display:flex;
+
+align-items:center;
+
+gap:6px;
+
+}
+
+.group-badge i{
+
+font-size:10px;
+
+}
+
 .tap-text{
 
 font-weight:700;
@@ -1342,7 +1350,7 @@ transition:.3s;
 
 .whatsapp-btn{
 
-background:#25D366;
+background:linear-gradient(145deg,#25D366,#1a8f4c);
 
 color:#fff;
 
@@ -1701,7 +1709,7 @@ box-shadow:var(--shadow);
 
 .footer-btn.whatsapp{
 
-background:#25D366;
+background:linear-gradient(145deg,#25D366,#1a8f4c);
 
 color:#fff;
 
@@ -1966,20 +1974,111 @@ grid-template-columns:1fr;
 
 .flip-card{
 
-min-height:560px;
+perspective:none;
+
+min-height:auto;
 
 }
 
 .flip-card-inner{
 
-height:560px;
+height:auto;
+
+transform:none!important;
+
+transition:none;
 
 }
 
-.card-front,
-.card-back{
+.card-front{
+
+position:relative;
+
+backface-visibility:visible;
+
+transform:none!important;
 
 padding:22px;
+
+}
+
+.card-back{
+
+position:static;
+
+backface-visibility:visible;
+
+transform:none!important;
+
+padding:22px;
+
+}
+
+.card-back{
+
+max-height:0;
+
+opacity:0;
+
+padding-top:0;
+
+padding-bottom:0;
+
+overflow:hidden;
+
+transition:
+
+max-height .5s ease,
+
+opacity .4s ease,
+
+padding .4s ease;
+
+}
+
+.flip-card.is-flipped .card-back{
+
+max-height:1200px;
+
+opacity:1;
+
+padding-top:22px;
+
+padding-bottom:22px;
+
+margin-top:14px;
+
+}
+
+/* السهم تحت "اضغط لعرض المواعيد" يتقلب لفوق لما الكارت يتفتح */
+
+.flip-card.is-flipped .tap-text::after{
+
+content:"↑";
+
+}
+
+.card-back .schedule-item{
+
+transition-delay:0s!important;
+
+}
+
+.flip-card.is-flipped .card-back .schedule-item:nth-child(1){
+
+transition-delay:.1s!important;
+
+}
+
+.flip-card.is-flipped .card-back .schedule-item:nth-child(2){
+
+transition-delay:.18s!important;
+
+}
+
+.flip-card.is-flipped .card-back .schedule-item:nth-child(3){
+
+transition-delay:.26s!important;
 
 }
 
@@ -2378,13 +2477,6 @@ transform:translateY(-8px);
     box-shadow:0 0 35px rgba(245,158,11,.35);
     margin:30px auto;   /* يخليها في النص */
     position:relative;
-    transform:translateY(var(--parallax-y,0px));
-}
-
-.hero-photo:hover{
-
-transform:translateY(var(--parallax-y,0px)) scale(1.05);
-
 }
 .hero::before{
 
@@ -2464,9 +2556,7 @@ scroll-snap-type:none;
 
 opacity:0;
 
-transform:scale(.6) translateY(-20px);
-
-animation:heroPhotoIn 1s cubic-bezier(.22,1,.36,1) .1s forwards;
+animation:heroPhotoIn .9s ease .1s forwards;
 
 }
 
@@ -2551,8 +2641,6 @@ animation:heroFadeUp .7s ease forwards;
 to{
 
 opacity:1;
-
-transform:scale(1) translateY(0);
 
 }
 
@@ -3206,23 +3294,48 @@ scroll-padding-top:80px;
 
 }
 
-/* الصورة في الهيرو تبقى أنسب لمساحة الموبايل */
-
-.hero-photo{
-
-width:130px;
-
-height:130px;
-
-margin:20px auto;
-
-border-width:4px;
-
-}
+/* الصورة تفضل بنفس الحجم الكبير حتى على الموبايل، بناءً على طلب العميل */
+/* بس المسافات حواليها بتتقل عشان المحتوى يظهر أسرع */
 
 .hero{
 
-padding:110px 16px 60px;
+padding:95px 16px 45px;
+
+}
+
+.hero-photo{
+
+margin:14px auto;
+
+}
+
+.hero-top{
+
+margin-bottom:14px;
+
+}
+
+.hero h1{
+
+margin-bottom:10px;
+
+}
+
+.hero h3{
+
+margin-bottom:12px;
+
+}
+
+.hero p{
+
+margin-bottom:22px;
+
+}
+
+.hero-actions{
+
+margin-bottom:28px;
 
 }
 
@@ -3306,14 +3419,6 @@ overflow:hidden;
 
 @media(max-width:480px){
 
-.hero-photo{
-
-width:105px;
-
-height:105px;
-
-}
-
 .progress-ring{
 
 width:82px;
@@ -3334,7 +3439,11 @@ font-size:19px;
         شريط واتساب ثابت (موبايل فقط)
 ==================================================*/
 
+.floating-whatsapp-mobile{
 
+display:none;
+
+}
 
 @media(max-width:768px){
 
@@ -3400,6 +3509,844 @@ footer{
 padding-bottom:130px;
 
 }
+
+}
+
+/*==================================================
+        توقيع بصري: رموز رياضية على الكروت
+==================================================*/
+
+.benefit-card,
+.about-card,
+.contact-card{
+
+position:relative;
+
+isolation:isolate;
+
+}
+
+.benefit-card::marker,
+.about-card::marker{
+
+content:none;
+
+}
+
+/* رمز رياضي كبير شفاف خلف كل كارت مميزات، مرتبط بمعنى الكارت */
+
+.benefits-grid .benefit-card{
+
+position:relative;
+
+}
+
+.benefits-grid .benefit-card::before{
+
+position:absolute;
+
+left:-6px;
+
+bottom:-28px;
+
+font-size:130px;
+
+font-weight:800;
+
+line-height:1;
+
+color:rgba(245,158,11,.07);
+
+z-index:0;
+
+pointer-events:none;
+
+transition:color .4s ease, transform .4s ease;
+
+}
+
+.benefits-grid .benefit-card:nth-child(1)::before{
+
+content:"Σ";
+
+}
+
+.benefits-grid .benefit-card:nth-child(2)::before{
+
+content:"Δ";
+
+}
+
+.benefits-grid .benefit-card:nth-child(3)::before{
+
+content:"∞";
+
+}
+
+.benefits-grid .benefit-card:hover::before{
+
+color:rgba(245,158,11,.15);
+
+transform:scale(1.08);
+
+}
+
+.benefit-card .benefit-icon,
+.benefit-card h3,
+.benefit-card p{
+
+position:relative;
+
+z-index:1;
+
+}
+
+/* رقم الخطوة الضخم الشفاف خلف كل كارت طريقة العمل، بنفس رقمها الحقيقي */
+
+.about-grid .about-card{
+
+position:relative;
+
+}
+
+.about-grid .about-card::before{
+
+position:absolute;
+
+left:6px;
+
+top:-30px;
+
+font-size:150px;
+
+font-weight:900;
+
+line-height:1;
+
+color:rgba(37,99,235,.08);
+
+z-index:0;
+
+pointer-events:none;
+
+transition:color .4s ease, transform .4s ease;
+
+font-family:"Cairo",sans-serif;
+
+}
+
+.about-grid .about-card:nth-child(1)::before{
+
+content:"١";
+
+}
+
+.about-grid .about-card:nth-child(2)::before{
+
+content:"٢";
+
+}
+
+.about-grid .about-card:nth-child(3)::before{
+
+content:"٣";
+
+}
+
+.about-grid .about-card:hover::before{
+
+color:rgba(37,99,235,.16);
+
+transform:scale(1.06);
+
+}
+
+.about-card h3,
+.about-card p{
+
+position:relative;
+
+z-index:1;
+
+}
+
+/*==================================================
+        شريط تمييز علوي عند الهوفر
+==================================================*/
+
+.benefit-card,
+.about-card,
+.contact-card,
+.flip-card .card-front,
+.flip-card .card-back{
+
+border-top:3px solid transparent;
+
+}
+
+.benefit-card,
+.about-card,
+.contact-card{
+
+transition:
+
+transform .35s,
+
+border-color .35s,
+
+border-top-color .4s ease;
+
+}
+
+.benefit-card:hover,
+.about-card:hover{
+
+border-top-color:var(--main);
+
+}
+
+.contact-card:hover{
+
+border-top-color:var(--blue);
+
+}
+
+/*==================================================
+        عناوين فرعية مرقّمة لكل سيكشن (رحلة السكرول)
+==================================================*/
+
+.benefits-section .section-title::before,
+.about-section .section-title::before,
+.schedule-section .section-title::before,
+.contact-section .section-title::before{
+
+display:inline-block;
+
+font-size:14px;
+
+font-weight:800;
+
+letter-spacing:1px;
+
+color:var(--main);
+
+background:rgba(245,158,11,.1);
+
+border:1px solid rgba(245,158,11,.2);
+
+padding:6px 18px;
+
+border-radius:30px;
+
+margin-bottom:16px;
+
+}
+
+.benefits-section .section-title::before{
+
+content:"٠١ · المميزات";
+
+}
+
+.about-section .section-title::before{
+
+content:"٠٢ · الأسلوب";
+
+color:var(--blue);
+
+background:rgba(37,99,235,.1);
+
+border-color:rgba(37,99,235,.2);
+
+}
+
+.schedule-section .section-title::before{
+
+content:"٠٣ · الجدول";
+
+}
+
+.contact-section .section-title::before{
+
+content:"٠٤ · تواصل";
+
+color:var(--blue);
+
+background:rgba(37,99,235,.1);
+
+border-color:rgba(37,99,235,.2);
+
+}
+
+/*==================================================
+        تحسين كارت المواعيد الأمامي (دعوة للتفاعل)
+==================================================*/
+
+.grade-number{
+
+position:relative;
+
+}
+
+.grade-number::before{
+
+content:"";
+
+position:absolute;
+
+inset:-8px;
+
+border-radius:50%;
+
+border:2px solid rgba(245,158,11,.35);
+
+animation:gradePulse 2.4s ease-out infinite;
+
+}
+
+@keyframes gradePulse{
+
+0%{
+
+transform:scale(1);
+
+opacity:1;
+
+}
+
+100%{
+
+transform:scale(1.35);
+
+opacity:0;
+
+}
+
+}
+
+.tap-text{
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+gap:8px;
+
+}
+
+.tap-text::after{
+
+content:"↓";
+
+display:inline-block;
+
+animation:tapBounce 1.4s ease-in-out infinite;
+
+}
+
+@keyframes tapBounce{
+
+0%,100%{
+
+transform:translateY(0);
+
+}
+
+50%{
+
+transform:translateY(5px);
+
+}
+
+}
+
+@media(prefers-reduced-motion:reduce){
+
+.grade-number::before,
+.tap-text::after{
+
+animation:none!important;
+
+}
+
+}
+
+/*==================================================
+        كروت المواعيد: حركة مميزة
+==================================================*/
+
+.card-front,
+.card-back{
+
+transition:
+
+transform .25s ease,
+
+box-shadow .25s ease;
+
+will-change:transform;
+
+}
+
+.flip-card:hover .card-front,
+.flip-card:hover .card-back{
+
+box-shadow:
+
+0 25px 60px rgba(0,0,0,.5),
+
+0 0 0 1px rgba(245,158,11,.12);
+
+}
+
+/* عناصر المواعيد بتدخل واحد ورا التاني لما الكارت يتقلب */
+
+.card-back .schedule-item{
+
+opacity:0;
+
+transform:translateY(22px);
+
+transition:
+
+opacity .5s ease,
+
+transform .5s ease;
+
+transition-delay:0s;
+
+}
+
+.flip-card.is-flipped .card-back .schedule-item{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+.flip-card.is-flipped .card-back .schedule-item:nth-child(1){
+
+transition-delay:.25s;
+
+}
+
+.flip-card.is-flipped .card-back .schedule-item:nth-child(2){
+
+transition-delay:.38s;
+
+}
+
+.flip-card.is-flipped .card-back .schedule-item:nth-child(3){
+
+transition-delay:.5s;
+
+}
+
+.card-back .schedule-actions{
+
+opacity:0;
+
+transform:translateY(18px);
+
+transition:opacity .5s ease .55s, transform .5s ease .55s;
+
+}
+
+.flip-card.is-flipped .card-back .schedule-actions{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+@media(prefers-reduced-motion:reduce){
+
+.card-front,
+.card-back,
+.card-back .schedule-item,
+.card-back .schedule-actions{
+
+transition:none!important;
+
+transform:none!important;
+
+}
+
+}
+
+/*==================================================
+        تولتيب + نبضة أولى لزرار الفيسبوك
+==================================================*/
+
+.floating-facebook{
+
+animation:fbIntroPulse 1.4s ease 2.4s;
+
+}
+
+@keyframes fbIntroPulse{
+
+0%{transform:scale(1);}
+
+30%{transform:scale(1.18);}
+
+55%{transform:scale(.96);}
+
+100%{transform:scale(1);}
+
+}
+
+.floating-facebook::after{
+
+content:"تابعنا على فيسبوك";
+
+position:absolute;
+
+right:74px;
+
+bottom:50%;
+
+transform:translateY(50%) translateX(8px);
+
+background:#111;
+
+color:#fff;
+
+font-size:13px;
+
+font-weight:700;
+
+padding:8px 14px;
+
+border-radius:10px;
+
+white-space:nowrap;
+
+opacity:0;
+
+pointer-events:none;
+
+transition:opacity .3s ease, transform .3s ease;
+
+box-shadow:0 8px 20px rgba(0,0,0,.3);
+
+}
+
+@media(hover:hover) and (pointer:fine){
+
+.floating-facebook:hover::after{
+
+opacity:1;
+
+transform:translateY(50%) translateX(0);
+
+}
+
+}
+
+/*==================================================
+        إحساس اللمس (موبايل)
+==================================================*/
+
+@media(hover:none){
+
+.hero-btn:active,
+.footer-btn:active,
+.whatsapp-btn:active,
+.call-btn:active,
+.tab-btn:active,
+.floating-facebook:active,
+.floating-whatsapp-mobile:active,
+#backToTop:active{
+
+transform:scale(.97);
+
+}
+
+.flip-card:active .card-front{
+
+transform:scale(.98);
+
+}
+
+.ripple{
+
+background:rgba(255,255,255,.6);
+
+}
+
+}
+
+/*==================================================
+        هوفر أقوى لكروت المحتوى (لاب توب)
+==================================================*/
+
+@media(hover:hover) and (pointer:fine){
+
+.benefit-card:hover,
+.about-card:hover,
+.contact-card:hover{
+
+transform:translateY(-12px);
+
+box-shadow:0 30px 60px rgba(0,0,0,.45);
+
+}
+
+}
+
+/*==================================================
+        توهج متحرك خلف صورة الهيرو
+==================================================*/
+
+.hero-content{
+
+position:relative;
+
+}
+
+.hero-photo-glow{
+
+position:absolute;
+
+top:14px;
+
+left:50%;
+
+width:230px;
+
+height:230px;
+
+transform:translateX(-50%);
+
+border-radius:50%;
+
+background:radial-gradient(
+
+circle,
+
+rgba(245,158,11,.35),
+
+transparent 70%
+
+);
+
+filter:blur(10px);
+
+animation:heroGlowPulse 4s ease-in-out infinite;
+
+z-index:0;
+
+pointer-events:none;
+
+}
+
+.hero-photo{
+
+position:relative;
+
+z-index:1;
+
+}
+
+@keyframes heroGlowPulse{
+
+0%,100%{
+
+transform:translateX(-50%) scale(1);
+
+opacity:.7;
+
+}
+
+50%{
+
+transform:translateX(-50%) scale(1.15);
+
+opacity:1;
+
+}
+
+}
+
+/*==================================================
+        خطوط شبكية رياضية خفيفة خلف الهيرو
+==================================================*/
+
+.hero-grid{
+
+position:absolute;
+
+inset:0;
+
+z-index:0;
+
+opacity:.05;
+
+pointer-events:none;
+
+background-image:
+
+linear-gradient(rgba(245,158,11,.6) 1px, transparent 1px),
+
+linear-gradient(90deg, rgba(245,158,11,.6) 1px, transparent 1px);
+
+background-size:48px 48px;
+
+-webkit-mask-image:radial-gradient(ellipse at center, #000 40%, transparent 75%);
+
+mask-image:radial-gradient(ellipse at center, #000 40%, transparent 75%);
+
+}
+
+/*==================================================
+        جراديانت متحرك لأزرار الهيرو والفوتر
+==================================================*/
+
+@media(hover:hover) and (pointer:fine){
+
+.hero-btn:not(.secondary),
+.footer-btn.whatsapp,
+.whatsapp-btn{
+
+background-size:200% 200%;
+
+transition:background-position .6s ease, transform .3s ease, box-shadow .3s ease;
+
+}
+
+.hero-btn:not(.secondary):hover,
+.footer-btn.whatsapp:hover,
+.whatsapp-btn:hover{
+
+background-position:100% 100%;
+
+}
+
+}
+
+/*==================================================
+        Bounce خفيف لما العداد يخلص
+==================================================*/
+
+@keyframes counterBounce{
+
+0%,100%{transform:translateY(0);}
+
+30%{transform:translateY(-6px);}
+
+55%{transform:translateY(1px);}
+
+}
+
+.stat-card strong.counted{
+
+animation:counterBounce .5s ease;
+
+}
+
+/*==================================================
+        شريط تقدم السكرول
+==================================================*/
+
+#scroll-progress{
+
+position:fixed;
+
+top:0;
+
+right:0;
+
+height:3px;
+
+width:0%;
+
+background:linear-gradient(90deg, var(--main), var(--blue));
+
+z-index:100000;
+
+transition:width .1s linear;
+
+}
+
+/*==================================================
+        زرار نسخ رقم الهاتف
+==================================================*/
+
+.copy-phone-btn{
+
+background:none;
+
+border:1px solid rgba(255,255,255,.15);
+
+color:#bbb;
+
+border-radius:8px;
+
+padding:4px 10px;
+
+font-size:12px;
+
+margin-right:8px;
+
+cursor:pointer;
+
+transition:.25s;
+
+font-family:inherit;
+
+}
+
+.copy-phone-btn:hover{
+
+border-color:var(--main);
+
+color:var(--main);
+
+}
+
+.copy-phone-btn.copied{
+
+border-color:#22c55e;
+
+color:#22c55e;
+
+}
+
+@media(prefers-reduced-motion:reduce){
+
+.floating-facebook,
+.hero-photo-glow,
+.stat-card strong.counted{
+
+animation:none!important;
+
+}
+
+}
+
+
+/*==================================================
+        إلغاء أنيميشن الدخول في الزيارة الثانية
+==================================================*/
+
+.repeat-visit .hero-photo,
+.repeat-visit .hero-top,
+.repeat-visit .hero h1,
+.repeat-visit .hero h3,
+.repeat-visit .hero p,
+.repeat-visit .hero-actions .hero-btn,
+.repeat-visit .hero-stats .stat-card{
+
+animation:none!important;
+
+opacity:1!important;
+
+transform:none!important;
 
 }
 
