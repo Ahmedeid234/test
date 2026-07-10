@@ -5,6 +5,22 @@
 ==================================================*/
 
 /*=========================================
+        صياغة عدد المجموعات بشكل صحيح لغويًا
+=========================================*/
+
+function groupCountText(count){
+
+if(count===1)return"مجموعة واحدة";
+
+if(count===2)return"مجموعتان";
+
+if(count>=3&&count<=10)return count+" مجموعات";
+
+return count+" مجموعة";
+
+}
+
+/*=========================================
         بيانات المواعيد
 =========================================*/
 const schedules=[
@@ -246,13 +262,11 @@ if(heroPhotoAnim){
 
 heroPhotoAnim.addEventListener("animationend",()=>{
 
-/* تثبيت الشفافية بس، وترك الترانسفورم لمتغير CSS عشان يتماشى مع الـ parallax والـ hover */
+/* تثبيت الصورة على شكلها النهائي بعد انتهاء الفيد */
 
 heroPhotoAnim.style.opacity="1";
 
 heroPhotoAnim.style.animation="none";
-
-heroPhotoAnim.style.setProperty("--parallax-y","0px");
 
 },{once:true});
 
@@ -264,9 +278,31 @@ heroPhotoAnim.style.setProperty("--parallax-y","0px");
 
 window.addEventListener("load",()=>{
 
+sessionStorage.setItem("visited","1");
+
 const loading=
 
 document.getElementById("loading-screen");
+
+const loadingText=document.getElementById("loading-text");
+
+/* رسائل تحميل متتابعة */
+
+if(loadingText){
+
+setTimeout(()=>{
+
+loadingText.textContent="جاري تحميل المجموعات...";
+
+},900);
+
+setTimeout(()=>{
+
+loadingText.textContent="جاهز ✔";
+
+},1700);
+
+}
 
 setTimeout(()=>{
 
@@ -334,6 +370,14 @@ card.innerHTML=`
 
 <div class="card-front">
 
+<div class="group-badge">
+
+<i class="fa-solid fa-layer-group"></i>
+
+${groupCountText(grade.groups.length)}
+
+</div>
+
 <div class="grade-number">
 
 ${grade.number}
@@ -345,12 +389,6 @@ ${grade.number}
 ${grade.title}
 
 </h3>
-
-<p class="group-count">
-
-${grade.groups.length} مجموعات
-
-</p>
 
 <p class="tap-text">
 
@@ -418,6 +456,50 @@ card.classList.toggle("is-flipped");
 });
 
 });
+
+/*=========================================
+        تأثير الميل التفاعلي (Tilt) للكروت
+=========================================*/
+
+if(window.matchMedia("(hover:hover) and (pointer:fine)").matches){
+
+document.querySelectorAll(".flip-card").forEach(card=>{
+
+const front=card.querySelector(".card-front");
+
+const back=card.querySelector(".card-back");
+
+card.addEventListener("mousemove",(e)=>{
+
+const rect=card.getBoundingClientRect();
+
+const x=(e.clientX-rect.left)/rect.width-.5;
+
+const y=(e.clientY-rect.top)/rect.height-.5;
+
+const rotateY=x*10;
+
+const rotateX=y*-10;
+
+const tiltValue=`rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+if(front)front.style.transform=tiltValue;
+
+if(back)back.style.transform=`rotateY(180deg) ${tiltValue}`;
+
+});
+
+card.addEventListener("mouseleave",()=>{
+
+if(front)front.style.transform="";
+
+if(back)back.style.transform="";
+
+});
+
+});
+
+}
 
 }
 /*=========================================
@@ -927,6 +1009,8 @@ requestAnimationFrame(step);
 
 el.textContent=prefix+target+suffix;
 
+el.classList.add("counted");
+
 }
 
 }
@@ -1070,39 +1154,75 @@ visible=false;
 }
 
 /*==================================================
-        المرحلة 3: Parallax خفيف
+        شريط تقدم السكرول
 ==================================================*/
 
-const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const scrollProgressBar=document.getElementById("scroll-progress");
 
-if(!reduceMotion && window.innerWidth>768){
-
-const heroPhotoEl=document.querySelector(".hero-photo");
-
-let ticking=false;
+if(scrollProgressBar){
 
 window.addEventListener("scroll",()=>{
 
-if(!ticking){
+const scrollTop=window.scrollY;
 
-requestAnimationFrame(()=>{
+const docHeight=
 
-const y=window.scrollY;
+document.documentElement.scrollHeight-window.innerHeight;
 
-if(heroPhotoEl){
+const percent=docHeight>0?(scrollTop/docHeight)*100:0;
 
-heroPhotoEl.style.setProperty("--parallax-y",(y*0.15)+"px");
-
-}
-
-ticking=false;
-
-});
-
-ticking=true;
-
-}
+scrollProgressBar.style.width=percent+"%";
 
 },{passive:true});
+
+}
+
+/*==================================================
+        زرار نسخ رقم الهاتف
+==================================================*/
+
+const copyPhoneBtn=document.querySelector(".copy-phone-btn");
+
+if(copyPhoneBtn){
+
+copyPhoneBtn.addEventListener("click",async()=>{
+
+const phone=copyPhoneBtn.dataset.phone;
+
+try{
+
+await navigator.clipboard.writeText(phone);
+
+}catch(err){
+
+const temp=document.createElement("textarea");
+
+temp.value=phone;
+
+document.body.appendChild(temp);
+
+temp.select();
+
+document.execCommand("copy");
+
+temp.remove();
+
+}
+
+const originalHTML=copyPhoneBtn.innerHTML;
+
+copyPhoneBtn.innerHTML='<i class="fa-solid fa-check"></i> تم النسخ';
+
+copyPhoneBtn.classList.add("copied");
+
+setTimeout(()=>{
+
+copyPhoneBtn.innerHTML=originalHTML;
+
+copyPhoneBtn.classList.remove("copied");
+
+},1800);
+
+});
 
 }
