@@ -3304,13 +3304,14 @@ overflow:hidden;
 
 }
 
-@media(max-width:480px){
+@media (max-width:480px){
 
 .hero-photo{
 
-width:105px;
+width:180px !important;
+height:180px !important;
 
-height:105px;
+}
 
 }
 
