@@ -3,6 +3,16 @@
 
 <head>
 
+    <script>
+
+    if(sessionStorage.getItem("visited")){
+
+    document.documentElement.className+=" repeat-visit";
+
+    }
+
+    </script>
+
     <meta charset="UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,6 +41,8 @@
 </head>
 
 <body>
+
+<div id="scroll-progress"></div>
 
 <div id="math-background"></div>
 
@@ -64,9 +76,9 @@
 
     </div>
 
-    <p>
+    <p id="loading-text">
 
-        جاري تحميل الموقع...
+        جاري تحميل المعادلات...
 
     </p>
 
@@ -122,6 +134,11 @@
 <header class="hero">
 
     <div class="hero-content">
+
+        <div class="hero-grid"></div>
+
+        <div class="hero-photo-glow"></div>
+
 <img src="mohamed-eid.jpg" class="hero-photo" alt="الأستاذ محمد عيد">
         <div class="hero-top">📘 تأسيس قوي • شرح مبسط • متابعة مستمرة</div>
 
@@ -443,6 +460,12 @@ class="schedule-section reveal">
 
                 </a>
 
+                <button class="copy-phone-btn" data-phone="01005339671" type="button">
+
+                    <i class="fa-regular fa-copy"></i> نسخ الرقم
+
+                </button>
+
             </div>
 
 
@@ -578,7 +601,19 @@ class="floating-facebook">
     Floating WhatsApp (Mobile Only)
 =========================== -->
 
+<a
 
+href="https://wa.me/201005339671"
+
+target="_blank"
+
+class="floating-whatsapp-mobile">
+
+<i class="fa-brands fa-whatsapp"></i>
+
+<span>احجز واتساب</span>
+
+</a>
 
 
 
