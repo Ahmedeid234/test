@@ -3334,11 +3334,7 @@ font-size:19px;
         شريط واتساب ثابت (موبايل فقط)
 ==================================================*/
 
-.floating-whatsapp-mobile{
 
-display:none;
-
-}
 
 @media(max-width:768px){
 
